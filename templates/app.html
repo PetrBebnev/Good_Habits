@@ -3,18 +3,64 @@
 
 {% block content %}
 <h1>Мои привычки</h1>
-<p class="subtitle">Отметьте привычки, которые вы выполнили сегодня.</p>
+<p class="subtitle">Отметьте выполненные привычки или добавьте свою.</p>
 
 {% if error %}
     <div class="alert alert-error">⚠️ {{ error }}</div>
 {% endif %}
+{% if success %}
+    <div class="alert alert-success">✅ {{ success }}</div>
+{% endif %}
 
+<!-- ============ Форма добавления привычки ============ -->
+<section class="add-habit-section">
+    <h2>➕ Добавить свою привычку</h2>
+    <form method="post" class="add-habit-form">
+        <input type="hidden" name="action" value="add">
+
+        <div class="form-row">
+            <label for="title">Название *</label>
+            <input type="text" id="title" name="title" maxlength="80"
+                   placeholder="Например: Пить зелёный чай утром"
+                   required>
+        </div>
+
+        <div class="form-row">
+            <label for="description">Описание *</label>
+            <textarea id="description" name="description" maxlength="200"
+                      rows="2" placeholder="Зачем вам эта привычка?"
+                      required></textarea>
+        </div>
+
+        <div class="form-row">
+            <label for="category">Категория *</label>
+            <input type="text" id="category" name="category" maxlength="30"
+                   list="category-list" placeholder="Например: Здоровье"
+                   required>
+            <datalist id="category-list">
+                <option value="Здоровье">
+                <option value="Спорт">
+                <option value="Развитие">
+                <option value="Питание">
+                <option value="Режим">
+                <option value="Ментальное здоровье">
+                <option value="Продуктивность">
+            </datalist>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Добавить привычку</button>
+    </form>
+</section>
+
+<!-- ============ Прогресс-бар ============ -->
 <div class="progress-bar-wrapper">
-    {% set percent = (completed|length / habits|length * 100) | round %}
+    {% set percent = (completed|length / habits|length * 100) | round if habits|length else 0 %}
     <div class="progress-bar">
         <div class="progress-bar-fill" style="width: {{ percent }}%;"></div>
     </div>
-    <p class="progress-label">Выполнено: {{ completed|length }} из {{ habits|length }} ({{ percent }}%)</p>
+    <p class="progress-label">
+        Выполнено: {{ completed|length }} из {{ habits|length }} ({{ percent }}%)
+    </p>
 </div>
 
 <form method="post" class="reset-form">
@@ -24,29 +70,43 @@
     </button>
 </form>
 
+<!-- ============ Список привычек ============ -->
 <div class="habit-list">
     {% for habit in habits %}
         <div class="habit-card {% if habit.id in completed %}done{% endif %}">
-            <img class="habit-img" src="{{ url_for('static', filename='images/' + habit.image) }}" alt="{{ habit.title }}">
+            <img class="habit-img"
+                 src="{{ url_for('static', filename='images/' + habit.image) }}"
+                 alt="{{ habit.title }}"
+                 onerror="this.src='{{ url_for('static', filename='images/hero.png') }}'">
+
             <div class="habit-info">
                 <span class="category">{{ habit.category }}</span>
+                {% if habit.custom %}<span class="badge-custom">своя</span>{% endif %}
                 <h3>{{ habit.title }}</h3>
                 <p>{{ habit.description }}</p>
             </div>
+
             <div class="habit-action">
                 {% if habit.id in completed %}
-                    <form method="post">
+                    <form method="post" class="inline-form">
                         <input type="hidden" name="habit_id" value="{{ habit.id }}">
-                        <button type="submit" name="action" value="uncomplete" class="btn btn-secondary">
-                            ↩ Снять
-                        </button>
+                        <button type="submit" name="action" value="uncomplete"
+                                class="btn btn-secondary">↩ Снять</button>
                     </form>
                 {% else %}
-                    <form method="post">
+                    <form method="post" class="inline-form">
                         <input type="hidden" name="habit_id" value="{{ habit.id }}">
-                        <button type="submit" name="action" value="complete" class="btn btn-primary">
-                            ✓ Выполнено
-                        </button>
+                        <button type="submit" name="action" value="complete"
+                                class="btn btn-primary">✓ Выполнено</button>
+                    </form>
+                {% endif %}
+
+                {% if habit.custom %}
+                    <form method="post" class="inline-form"
+                          onsubmit="return confirm('Удалить привычку «{{ habit.title }}»?');">
+                        <input type="hidden" name="habit_id" value="{{ habit.id }}">
+                        <button type="submit" name="action" value="delete"
+                                class="btn btn-danger btn-small">🗑</button>
                     </form>
                 {% endif %}
             </div>

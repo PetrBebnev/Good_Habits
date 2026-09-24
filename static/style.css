@@ -76,7 +76,7 @@ body {
 .hero h1 { font-size: 34px; color: var(--primary-dark); margin-bottom: 12px; }
 .hero .lead { color: var(--muted); margin-bottom: 16px; }
 .hero .stats-line { margin-bottom: 24px; color: var(--muted); }
-.hero-image img { width: 100%; border-radius: 12px; }
+.hero-image img { width: 100%; height: auto; border-radius: 12px; display: block; }
 
 .actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
@@ -252,6 +252,90 @@ body {
 
 .reset-form { margin-bottom: 10px; }
 
+/* ---------- Форма добавления привычки ---------- */
+.add-habit-section {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    margin: 20px 0 28px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+    border-left: 5px solid var(--primary);
+}
+
+.add-habit-section h2 {
+    color: var(--primary-dark);
+    margin-bottom: 16px;
+    font-size: 20px;
+}
+
+.add-habit-form .form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+}
+
+.add-habit-form label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.add-habit-form input,
+.add-habit-form textarea {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: vertical;
+}
+
+.add-habit-form input:focus,
+.add-habit-form textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(46,125,50,0.12);
+}
+
+/* ---------- Значки и мелкие кнопки ---------- */
+.badge-custom {
+    display: inline-block;
+    background: #fff3e0;
+    color: #e65100;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 8px;
+    margin-left: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+.btn-small {
+    padding: 6px 10px;
+    font-size: 14px;
+    margin-left: 6px;
+}
+
+.inline-form { display: inline-block; }
+
+.habit-action {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+/* ---------- Успешное сообщение ---------- */
+.alert-success {
+    background: #e8f5e9;
+    color: var(--primary-dark);
+    border: 1px solid #a5d6a7;
+}
+
 /* ---------- Адаптив ---------- */
 @media (max-width: 720px) {
     .hero { grid-template-columns: 1fr; padding: 22px; }
@@ -259,8 +343,31 @@ body {
     .habit-card { grid-template-columns: 70px 1fr; grid-template-areas: "img info" "action action"; }
     .habit-img { width: 70px; height: 60px; grid-area: img; }
     .habit-info { grid-area: info; }
-    .habit-action { grid-area: action; text-align: right; }
+    .habit-action { grid-area: action; text-align: right; justify-content: flex-start; }
     .progress-hero { flex-direction: column; text-align: center; }
     .topbar { flex-direction: column; align-items: flex-start; }
     .topbar nav a { margin-left: 0; margin-right: 14px; }
+    .add-habit-section { padding: 18px; }
+/* ---------- Страницы ошибок ---------- */
+.error-page {
+    text-align: center;
+    padding: 60px 20px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+    max-width: 600px;
+    margin: 40px auto;
+}
+
+.error-page h1 {
+    color: var(--danger);
+    font-size: 32px;
+    margin-bottom: 16px;
+}
+
+.error-page p {
+    color: var(--muted);
+    margin-bottom: 24px;
+    font-size: 16px;
+}
 }
