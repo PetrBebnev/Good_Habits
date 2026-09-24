@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} — Прогресс{% endblock %}
+
+{% block content %}
+<h1>Ваш прогресс</h1>
+
+<div class="progress-hero">
+    <img src="{{ url_for('static', filename='images/progress.png') }}" alt="Прогресс">
+    <div>
+        <p class="big-number">{{ done }} / {{ total }}</p>
+        <p class="percent">Выполнено {{ percent }}%</p>
+        <p class="motivation">{{ message }}</p>
+    </div>
+</div>
+
+<div class="progress-bar-wrapper">
+    <div class="progress-bar">
+        <div class="progress-bar-fill" style="width: {{ percent }}%;"></div>
+    </div>
+</div>
+
+<h2>По категориям</h2>
+<div class="category-grid">
+    {% for cat, info in categories.items() %}
+        <div class="category-card">
+            <h3>{{ cat }}</h3>
+            <p>{{ info.done }} / {{ info.total }}</p>
+            <div class="mini-bar">
+                <div class="mini-bar-fill"
+                     style="width: {{ (info.done / info.total * 100) | round }}%;"></div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<h2>Выполненные привычки</h2>
+{% if completed_habits %}
+    <ul class="completed-list">
+        {% for h in completed_habits %}
+            <li>✅ <strong>{{ h.title }}</strong> — {{ h.category }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p class="empty">Пока нет выполненных привычек. <a href="{{ url_for('app_page') }}">Начать →</a></p>
+{% endif %}
+{% endblock %}

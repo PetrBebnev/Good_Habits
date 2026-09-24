@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} — Привычки{% endblock %}
+
+{% block content %}
+<h1>Мои привычки</h1>
+<p class="subtitle">Отметьте привычки, которые вы выполнили сегодня.</p>
+
+{% if error %}
+    <div class="alert alert-error">⚠️ {{ error }}</div>
+{% endif %}
+
+<div class="progress-bar-wrapper">
+    {% set percent = (completed|length / habits|length * 100) | round %}
+    <div class="progress-bar">
+        <div class="progress-bar-fill" style="width: {{ percent }}%;"></div>
+    </div>
+    <p class="progress-label">Выполнено: {{ completed|length }} из {{ habits|length }} ({{ percent }}%)</p>
+</div>
+
+<form method="post" class="reset-form">
+    <button type="submit" name="action" value="reset" class="btn btn-danger"
+            onclick="return confirm('Сбросить весь прогресс?');">
+        Сбросить прогресс
+    </button>
+</form>
+
+<div class="habit-list">
+    {% for habit in habits %}
+        <div class="habit-card {% if habit.id in completed %}done{% endif %}">
+            <img class="habit-img" src="{{ url_for('static', filename='images/' + habit.image) }}" alt="{{ habit.title }}">
+            <div class="habit-info">
+                <span class="category">{{ habit.category }}</span>
+                <h3>{{ habit.title }}</h3>
+                <p>{{ habit.description }}</p>
+            </div>
+            <div class="habit-action">
+                {% if habit.id in completed %}
+                    <form method="post">
+                        <input type="hidden" name="habit_id" value="{{ habit.id }}">
+                        <button type="submit" name="action" value="uncomplete" class="btn btn-secondary">
+                            ↩ Снять
+                        </button>
+                    </form>
+                {% else %}
+                    <form method="post">
+                        <input type="hidden" name="habit_id" value="{{ habit.id }}">
+                        <button type="submit" name="action" value="complete" class="btn btn-primary">
+                            ✓ Выполнено
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

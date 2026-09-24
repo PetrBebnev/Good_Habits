@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} — Главная{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <h1>{{ app_name }}</h1>
+        <p class="lead">{{ description }}</p>
+        <p class="stats-line">
+            Всего привычек: <strong>{{ total }}</strong> · Уже выполнено: <strong>{{ completed_count }}</strong>
+        </p>
+        <div class="actions">
+            <a href="{{ url_for('app_page') }}" class="btn btn-primary">Начать</a>
+            <a href="{{ url_for('progress') }}" class="btn btn-secondary">Посмотреть прогресс</a>
+        </div>
+    </div>
+    <div class="hero-image">
+        <img src="{{ url_for('static', filename='images/hero.png') }}" alt="Полезные привычки">
+    </div>
+</section>
+
+<section class="features">
+    <h2>Почему это работает?</h2>
+    <div class="cards">
+        <div class="card">
+            <img src="{{ url_for('static', filename='images/habits.png') }}" alt="Привычки">
+            <h3>Простые шаги</h3>
+            <p>Отмечайте выполненные привычки одним нажатием.</p>
+        </div>
+        <div class="card">
+            <img src="{{ url_for('static', filename='images/progress.png') }}" alt="Прогресс">
+            <h3>Видимый прогресс</h3>
+            <p>Следите за результатами и статистикой по категориям.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
